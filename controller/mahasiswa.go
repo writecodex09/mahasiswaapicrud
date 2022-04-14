@@ -45,3 +45,45 @@ c.JSON(200, gin.H{
 	"Data" : mhs,
 })
 }
+//Ubah Data Mahasiswa
+func Ubah(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	//cek data nya apakah ada atau tidak
+	var mhs models.Mahasiswa
+	if err:= db.Where("nim = ? ", c.Param("nim")).First(&mhs).Error; err != nil {
+		c.JSON(400, gin.H{"error":"data mahasiswa tdak di temukan"})
+	}
+
+	//	validasi data -> JSON
+	var dataInput MahasiswaInput
+	if err := c.ShouldBindJSON(&dataInput);err != nil {
+		c.JSON(400, gin.H{
+			"error" : err.Error(),
+		})
+		return
+	}
+	//db.Create(&mhs)
+	db.Model(&mhs).Update(dataInput)
+	c.JSON(200, gin.H{
+		"Messaage" : "Data berhasil di ubah",
+		"Data" : mhs,
+	})
+}
+//Hapus Data Mahasiswa
+func Hapus(c *gin.Context) {
+	db := c.MustGet("db").(*gorm.DB)
+
+	//cek data nya apakah ada atau tidak
+	var mhs models.Mahasiswa
+	if err:= db.Where("nim = ? ", c.Param("nim")).First(&mhs).Error; err != nil {
+		c.JSON(400, gin.H{"error":"data mahasiswa tdak di temukan"})
+	}
+	//db.Create(&mhs)
+	db.Delete(&mhs)
+	c.JSON(200, gin.H{
+		"Messaage" : "Data berhasil di Hapus",
+		"Data" : true,
+	})
+}
+

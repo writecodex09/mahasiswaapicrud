@@ -23,5 +23,7 @@ func main() {
 
 	router.GET("/mahasiswa", controller.Tampil)
 	router.POST("/mahasiswa", controller.Tambah)
+	router.PUT("/mahasiswa/:nim", controller.Ubah)
+	router.DELETE("/mahasiswa/:nim", controller.Hapus)
 	router.Run()
 }
